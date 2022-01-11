@@ -40,11 +40,11 @@ export const PresentationView = (props: PresentationViewProps) => {
 
     const doFullscreenEnter = React.useCallback(() => {
         setFullscreen(true);
-    }, []);
+    }, [setFullscreen]);
 
     const doFullscreenExit = React.useCallback(() => {
         setFullscreen(false);
-    }, []);
+    }, [setFullscreen]);
 
     const currentDiagram = React.useMemo(() => {
         return diagramsOrdered[pageIndex];

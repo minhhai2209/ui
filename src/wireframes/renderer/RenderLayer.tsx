@@ -5,10 +5,11 @@
  * Copyright (c) Sebastian Stehle. All rights reserved.
 */
 
-import { Diagram, DiagramContainer, DiagramItem, RendererService } from '@app/wireframes/model';
+import { Diagram, DiagramItem, RendererService } from '@app/wireframes/model';
 import * as React from 'react';
 import * as svg from '@svgdotjs/svg.js';
 import { ShapeRef } from './shape-ref';
+import { getOrderedShapes } from './shape-rendering';
 
 export interface RenderLayerProps {
     // The renderer service.
@@ -42,32 +43,7 @@ export const RenderLayer = React.memo((props: RenderLayerProps) => {
     const shapeRefsById = React.useRef<{ [id: string]: ShapeRef }>({});
 
     const orderedShapes = React.useMemo(() => {
-        const flattenShapes: DiagramItem[] = [];
-
-        if (diagram) {
-            let handleContainer: (itemIds: DiagramContainer) => any;
-
-            // eslint-disable-next-line prefer-const
-            handleContainer = itemIds => {
-                for (const id of itemIds.values) {
-                    const item = diagram.items.get(id);
-
-                    if (item) {
-                        if (item.type === 'Shape') {
-                            flattenShapes.push(item);
-                        }
-
-                        if (item.type === 'Group') {
-                            handleContainer(item.childIds);
-                        }
-                    }
-                }
-            };
-
-            handleContainer(diagram.itemIds);
-        }
-
-        return flattenShapes;
+        return getOrderedShapes(diagram);
     }, [diagram]);
 
     React.useEffect(() => {

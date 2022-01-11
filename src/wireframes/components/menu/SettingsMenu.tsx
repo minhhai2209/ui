@@ -5,10 +5,12 @@
  * Copyright (c) Sebastian Stehle. All rights reserved.
 */
 
-import { ExportOutlined, PrinterOutlined, SettingOutlined } from '@ant-design/icons';
+import { ExportOutlined, PrinterOutlined, SaveOutlined, SettingOutlined } from '@ant-design/icons';
+import { RendererContext } from '@app/context';
 import { Color, ColorPicker, Shortcut } from '@app/core';
 import { texts } from '@app/texts';
 import { changeColor, changeSize, getEditor, useStore } from '@app/wireframes/model';
+import { exportDiagram } from '@app/wireframes/renderer/shape-rendering';
 import { Button, Col, Dropdown, InputNumber, Menu, Modal, Row, Tooltip } from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import * as React from 'react';
@@ -26,6 +28,7 @@ export const SettingsMenu = React.memo((props: SettingsMenuProps) => {
     const editor = useStore(getEditor);
     const editorSize = editor.size;
     const editorColor = editor.color;
+    const renderer = React.useContext(RendererContext);
     const [isOpen, setIsOpen] = React.useState(false);
     const [sizeWidth, setWidth] = React.useState(0);
     const [sizeHeight, setHeight] = React.useState(0);
@@ -47,6 +50,10 @@ export const SettingsMenu = React.memo((props: SettingsMenuProps) => {
         setIsOpen(false);
     }, [dispatch, sizeWidth, sizeHeight, color]);
 
+    const doExport = React.useCallback(() => {
+        exportDiagram(editor.orderedDiagrams, editor.size, renderer);
+    }, [editor.orderedDiagrams, editor.size, renderer]);
+
     const doToggle = React.useCallback(() => {
         setIsOpen(value => !value);
     }, []);
@@ -63,6 +70,9 @@ export const SettingsMenu = React.memo((props: SettingsMenuProps) => {
         <Menu>
             <MenuItem onClick={onPrint}>
                 <PrinterOutlined /> {texts.common.printDiagrams}
+            </MenuItem>
+            <MenuItem onClick={doExport}>
+                <SaveOutlined /> {texts.common.save}
             </MenuItem>
         </Menu>;
 

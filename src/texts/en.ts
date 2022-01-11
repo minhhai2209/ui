@@ -65,6 +65,7 @@ export const texts = {
         saveDiagramTooltip: 'Save Diagram',
         sendBackwards: 'Send Backwards',
         sendToBack: 'Send to Back',
+        save: 'Save',
         shapes: 'Shapes',
         strokeColor: 'Stroke Color',
         strokeThickness: 'Stroke Thickness',
